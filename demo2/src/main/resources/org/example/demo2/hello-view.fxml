@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo2.HelloController">
+   <children>
+      <TreeView fx:id="treeView" prefHeight="653.0" prefWidth="200.0" />
+      <ComboBox fx:id="FirstComboBox" layoutX="216.0" layoutY="109.0" prefHeight="25.0" prefWidth="392.0" />
+      <ComboBox fx:id="SecondComboBox" layoutX="216.0" layoutY="153.0" prefHeight="25.0" prefWidth="392.0" />
+      <Label fx:id="labelTreePath" layoutX="618.0" layoutY="113.0" text="TreePath" />
+      <Label fx:id="labelQuestion" layoutX="216.0" layoutY="194.0" text="TreeParent" />
+      <Label fx:id="labelAnswer" layoutX="216.0" layoutY="224.0" text="TreeChild" />
+      <Label fx:id="labelFinal" layoutX="618.0" layoutY="157.0" text="FinalNode" />
+   </children>
+</AnchorPane>
