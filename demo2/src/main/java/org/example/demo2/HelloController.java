@@ -205,7 +205,6 @@ public class HelloController implements Initializable{
             String selectedItem = SecondComboBox.getValue();
             // Находим TreeItem по выбранному элементу во втором ComboBox
             TreeItem<String> selectedItemInTree = findTreeItem(root, selectedItem);
-            // Здесь вы можете делать что-то с выбранным элементом, например, отображать его данные или проводить вычисления
             if (selectedItemInTree != null) {
                 FirstComboBox.getItems().add(selectedItem);
 
