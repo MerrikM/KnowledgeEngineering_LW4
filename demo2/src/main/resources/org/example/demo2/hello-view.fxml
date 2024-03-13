@@ -3,14 +3,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo2.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo2.HelloController">
    <children>
       <TreeView fx:id="treeView" prefHeight="653.0" prefWidth="200.0" />
-      <ComboBox fx:id="FirstComboBox" layoutX="216.0" layoutY="109.0" prefHeight="25.0" prefWidth="392.0" />
-      <ComboBox fx:id="SecondComboBox" layoutX="216.0" layoutY="153.0" prefHeight="25.0" prefWidth="392.0" />
-      <Label fx:id="labelTreePath" layoutX="618.0" layoutY="113.0" text="TreePath" />
-      <Label fx:id="labelQuestion" layoutX="216.0" layoutY="194.0" text="TreeParent" />
-      <Label fx:id="labelAnswer" layoutX="216.0" layoutY="224.0" text="TreeChild" />
-      <Label fx:id="labelFinal" layoutX="618.0" layoutY="157.0" text="FinalNode" />
+      <ComboBox fx:id="FirstComboBox" layoutX="211.0" layoutY="118.0" prefHeight="25.0" prefWidth="58.0" />
+      <ComboBox fx:id="SecondComboBox" layoutX="211.0" layoutY="153.0" prefHeight="25.0" prefWidth="58.0" />
+      <Label fx:id="labelTreePath" layoutX="213.0" layoutY="192.0" text="TreePath" />
+      <Label fx:id="labelQuestion" layoutX="283.0" layoutY="122.0" text="TreeParent" />
+      <Label fx:id="labelAnswer" layoutX="283.0" layoutY="157.0" text="TreeChild" />
+      <Label fx:id="labelFinal" layoutX="213.0" layoutY="216.0" text="FinalNode" />
+      <Button fx:id="clearTreePathButton" layoutX="211.0" layoutY="300.0" mnemonicParsing="false" text="Clear Tree Path" />
+      <Button fx:id="showAllTreeNodes" layoutX="211.0" layoutY="330.0" mnemonicParsing="false" text="Show all vertices and information about them" />
    </children>
 </AnchorPane>

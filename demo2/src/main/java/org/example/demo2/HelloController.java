@@ -1,13 +1,14 @@
 package org.example.demo2;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -32,6 +33,12 @@ public class HelloController implements Initializable{
 
     @FXML
     private Label labelFinal;
+
+    @FXML
+    private Button clearTreePathButton;
+
+    @FXML
+    private Button showAllTreeNodes;
 
     public void FillTree() {
         int size = 62;
@@ -174,7 +181,7 @@ public class HelloController implements Initializable{
         arrayy[56].getChildren().add(arrayy[59]);       arrayy[56].getChildren().add(arrayy[60]);
 
         //Первые 2 потомка нулевой вершины
-        FirstComboBox.getItems().addAll(root.getChildren().get(0).getValue(), root.getChildren().get(1).getValue());
+        FirstComboBox.getItems().add(root.getValue());
 
         FirstComboBox.setOnAction(event -> {
             String selectedItem = FirstComboBox.getValue();
@@ -192,6 +199,7 @@ public class HelloController implements Initializable{
                 }
             }
         });
+
 
         SecondComboBox.setOnAction(event -> {
             String selectedItem = SecondComboBox.getValue();
@@ -212,6 +220,31 @@ public class HelloController implements Initializable{
                     labelFinal.setTextFill(Color.GREEN);
                 }
             }
+        });
+
+        clearTreePathButton.setOnAction(event -> {
+            FirstComboBox.getItems().clear();
+            SecondComboBox.getItems().clear();
+            FirstComboBox.getItems().add(root.getValue());
+
+            labelQuestion.setText("");
+            labelAnswer.setText("");
+            labelTreePath.setText("");
+            labelFinal.setText("");
+        });
+
+        showAllTreeNodes.setOnAction(e -> {
+            FXMLLoader fxmlLoader1 = new FXMLLoader(HelloApplication.class.getResource("AllTreeNodes.fxml"));
+            Scene scene2 = null;
+            try {
+                scene2 = new Scene(fxmlLoader1.load(), 600, 400);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            Stage stage = new Stage();
+            stage.setTitle("AllTreeNodes");
+            stage.setScene(scene2);
+            stage.show();
         });
     }
 }
