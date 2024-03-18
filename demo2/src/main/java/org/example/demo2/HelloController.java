@@ -3,6 +3,7 @@ package org.example.demo2;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
@@ -39,6 +40,9 @@ public class HelloController implements Initializable{
 
     @FXML
     private Button showAllTreeNodes;
+
+    @FXML
+    private Button explanationButton;
 
     public void FillTree() {
         int size = 62;
@@ -128,6 +132,8 @@ public class HelloController implements Initializable{
         labelQuestion.setText("");
 
         Hash h = new Hash();
+        Explanation expl = new Explanation();
+
         int size = 62;
         TreeItem<String> root = new TreeItem<>("0");
         root.setExpanded(true);
@@ -180,6 +186,9 @@ public class HelloController implements Initializable{
         arrayy[52].getChildren().add(arrayy[57]);       arrayy[52].getChildren().add(arrayy[58]);
         arrayy[56].getChildren().add(arrayy[59]);       arrayy[56].getChildren().add(arrayy[60]);
 
+
+        Label explanationLabel = new Label("Label"); // Label для Explanation Form
+
         //Первые 2 потомка нулевой вершины
         FirstComboBox.getItems().add(root.getValue());
 
@@ -194,6 +203,9 @@ public class HelloController implements Initializable{
                 for (TreeItem<String> child : selectedItemInTree.getChildren()) {
                     SecondComboBox.getItems().add(child.getValue());
 
+                    explanationLabel.setText("");
+                    explanationLabel.setText(expl.explanation.get(selectedItem));
+
                     labelQuestion.setText("");
                     labelQuestion.setText(h.graphVerticies.get(selectedItem));
                 }
@@ -205,6 +217,7 @@ public class HelloController implements Initializable{
             String selectedItem = SecondComboBox.getValue();
             // Находим TreeItem по выбранному элементу во втором ComboBox
             TreeItem<String> selectedItemInTree = findTreeItem(root, selectedItem);
+            // Здесь вы можете делать что-то с выбранным элементом, например, отображать его данные или проводить вычисления
             if (selectedItemInTree != null) {
                 FirstComboBox.getItems().add(selectedItem);
 
@@ -213,6 +226,9 @@ public class HelloController implements Initializable{
 
                 labelTreePath.setText("");
                 labelTreePath.setText(labelTreePath.getText() + FirstComboBox.getItems());
+
+                explanationLabel.setText("");
+                explanationLabel.setText(expl.explanation.get(selectedItem));
 
                 if(h.CheckVerticies(selectedItem)) {
                     labelFinal.setText(FirstComboBox.getItems().getLast() + " " + h.graphVerticies.get(selectedItem));
@@ -243,6 +259,14 @@ public class HelloController implements Initializable{
             Stage stage = new Stage();
             stage.setTitle("AllTreeNodes");
             stage.setScene(scene2);
+            stage.show();
+        });
+
+        explanationButton.setOnAction(e -> {
+            Stage stage = new Stage();
+            Scene scene = new Scene(new Group(), 800, 200);
+            ((Group) scene.getRoot()).getChildren().addAll(explanationLabel);
+            stage.setScene(scene);
             stage.show();
         });
     }
