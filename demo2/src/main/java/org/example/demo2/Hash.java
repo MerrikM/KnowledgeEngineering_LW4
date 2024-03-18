@@ -40,7 +40,7 @@ public class Hash {
         graphVerticies.put("27", "Класс: Дельты. На какую дельту упор: переднюю или среднюю/заднюю");
         graphVerticies.put("28", "Тип: упражнение - сгибание/разгибание корпуса в полуамплитуде на вверх пресса"); // Завершены
         graphVerticies.put("29", "Тип: упражнения - подъем ног в положении лежа"); // Завершены
-        graphVerticies.put("30", "Тип: упражнение - присед со штангой?");
+        graphVerticies.put("30", "Тип: упражнение - присед со штангой");
         graphVerticies.put("31", "Тип: упражнение - разгибание ног в тренажере");
         graphVerticies.put("32", "Тип: упражнение - удержание ноги в воздухе");
         graphVerticies.put("33", "Тип: упражнение - разведение ног в стороны на приводящей машине");
@@ -91,23 +91,6 @@ public class Hash {
         }
     }
 
-    public Set<String> GetElemById(String index) {
-        return graphVerticies.keySet();
-    }
-
-//    public void GetTreeValue(TreeItem<String> rootTreeNode, String key) {
-//        HashMap<String, String> hashMap = new HashMap<>();
-//        hashMap.put("key", "value");
-//
-//        String value = hashMap.get("key");
-//
-//        if (value != null) {
-//            System.out.println("Значение по ключу найдено: " + value);
-//        } else {
-//            System.out.println("По ключу ничего не найдено");
-//        }
-//    }
-
     public void InitializeTreeItem(TreeItem<String> rootTreeNode, String key) {
         TreeItem<String> treeItem = new TreeItem<>();
         treeItem.setExpanded(true);
@@ -118,8 +101,8 @@ public class Hash {
         rootTreeNode.getChildren().add(new TreeItem<String>(key));
     }
 
-    public boolean CheckVerticies(String key) {
-        if(graphVerticies.get(key).contains("Тип:")){
+    public boolean CheckVerticies() {
+        if(graphVerticies.containsValue("Тип:")){
             System.out.println("Подстрока найдена");
             return true;
         }else{
