@@ -4,8 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 
-public class Edges {
+public class Edges extends Hash {
     private Hashtable<String, String> graphedges = new Hashtable<>();
+
     Edges() {
         String file = System.getProperty("user.dir") + "/src/main/resources/KnowledgeBase/TableWithEdges2.csv";
         List<String> lines = new ArrayList<>();
@@ -23,24 +24,7 @@ public class Edges {
         }
     }
 
-    public Hashtable<String, String> getHashtable() {
+    public Hashtable<String, String> getGraphEdges() {
         return graphedges;
-    }
-    public String GetEdgesByStrId(String index) {
-        String[] keys = graphedges.keySet().toArray(new String[0]);
-        //Arrays.sort(keys);
-        for (int i = 0; i < graphedges.size(); i++) {
-            keys[i] = index;
-        }
-        return keys[Integer.parseInt(index)];
-    }
-
-    public String getHashKeyByValue(Hashtable<String, String> map, String value) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (entry.getValue().equals(value)) {
-                return entry.getKey();
-            }
-        }
-        return null;
     }
 }

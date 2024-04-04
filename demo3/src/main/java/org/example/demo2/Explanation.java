@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class Explanation {
+public class Explanation extends Hash {
     private Hashtable<String, String> explanation = new Hashtable<>();
     Explanation() {
         String file = System.getProperty("user.dir") + "/src/main/resources/KnowledgeBase/TableWithExplanation.csv";
@@ -24,16 +24,7 @@ public class Explanation {
             explanation.put(String.valueOf(i), array[i]);
         }
     }
-    public Hashtable<String, String> getHashtable() {
+    public Hashtable<String, String> getExplanation() {
         return explanation;
-    }
-
-    public String getExplanationByStrId(String index) {
-        String[] keys = explanation.keySet().toArray(new String[0]);
-        //Arrays.sort(keys);
-        for (int i = 0; i < explanation.size(); i++) {
-            keys[i] = index;
-        }
-        return keys[Integer.parseInt(index)];
     }
 }

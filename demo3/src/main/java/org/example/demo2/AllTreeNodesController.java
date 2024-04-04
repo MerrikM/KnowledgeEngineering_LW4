@@ -19,10 +19,10 @@ public class AllTreeNodesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Hash h = new Hash();
+        Hash hash = new Hash();
         labelForHash.setText("");
-        for(int i = 0; i < h.getHashtable().size(); i++) {
-            labelForHash.setText(labelForHash.getText() + "[" + i + "]" + " " + h.getHashtable().get(String.valueOf(i)) + "\n");
+        for(int i = 0; i < hash.getGraphVerticies().size(); i++) {
+            labelForHash.setText(labelForHash.getText() + "[" + i + "]" + " " + hash.getGraphVerticies().get(String.valueOf(i)) + "\n");
         }
     }
 }

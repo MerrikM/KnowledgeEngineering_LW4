@@ -6,7 +6,6 @@ import java.util.*;
 
 public class Hash {
     private Hashtable<String, String> graphVerticies = new Hashtable<>();
-
     Hash() {
         String file = System.getProperty("user.dir") + "/src/main/resources/KnowledgeBase/TableWithoutNumeration.csv";
         List<String> lines = new ArrayList<>();
@@ -24,26 +23,35 @@ public class Hash {
         }
     }
 
-    public Hashtable<String, String> getHashtable() {
+    protected Hashtable<String, String> getGraphVerticies() {
         return graphVerticies;
     }
 
-    public String GetVerticiesByStrId(String index) {
-        String[] keys = graphVerticies.keySet().toArray(new String[0]);
+    protected String getHashKeyByValue(Hashtable<String, String> map, String value) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    protected String GetVerticiesByStrId(Hashtable<String, String> hashtable, String index) {
+        String[] keys = hashtable.keySet().toArray(new String[0]);
         //Arrays.sort(keys);
-        for (int i = 0; i < graphVerticies.size(); i++) {
+        for (int i = 0; i < hashtable.size(); i++) {
             keys[i] = index;
         }
         return keys[Integer.parseInt(index)];
     }
 
-    public void DisplayAllHash() {
-        for(int i = 0; i <= graphVerticies.size() - 1; i++) {
-            System.out.println("[" + i + "]" + " " + graphVerticies.get(String.valueOf(i)));
+    protected void DisplayAllHash(Hashtable<String, String> hashtable) {
+        for(int i = 0; i <= hashtable.size() - 1; i++) {
+            System.out.println("[" + i + "]" + " " + hashtable.get(String.valueOf(i)));
         }
     }
 
-    public String getMapKeyByValue(Hashtable<String, String> map, String value) {
+    protected String getMapKeyByValue(Hashtable<String, String> map, String value) {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (entry.getValue().equals(value)) {
                 return entry.getKey();

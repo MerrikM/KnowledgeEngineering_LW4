@@ -50,7 +50,6 @@ public class TrainingProgramController implements Initializable{
 
     @FXML
     private Button moveBackBtn;
-
     private TreeItem<String> findTreeItem(TreeItem<String> root, String name) {
         if (root.getValue().equals(name)) {
             return root;
@@ -63,7 +62,6 @@ public class TrainingProgramController implements Initializable{
         }
         return null;
     }
-
     private List<TreeItem<String>> findNode(TreeItem<String> item, String searchValue) {
         List<TreeItem<String>> result = new ArrayList<>();
         if (item != null && item.getValue().equals(searchValue)) {
@@ -81,10 +79,9 @@ public class TrainingProgramController implements Initializable{
     }
     private static void showExplanation(Label explanationLabel, String selectedItem) {
         Explanation expl = new Explanation();
-        String explText = expl.getHashtable().get(selectedItem);
+        String explText = expl.getExplanation().get(selectedItem);
         explanationLabel.setText(newLineInLabel(explText));
     }
-
     private static String findFirstNumber(String str) {
         Pattern pattern = Pattern.compile("^\\D*(\\d+).*$");
         Matcher matcher = pattern.matcher(str);
@@ -94,7 +91,6 @@ public class TrainingProgramController implements Initializable{
             return "";
         }
     }
-
     private String loadImage(String imageName) {
         String filePath = "file:\\" + System.getProperty("user.dir") + "\\src\\main\\resources\\images\\" + imageName + ".jpg";
 
@@ -119,29 +115,62 @@ public class TrainingProgramController implements Initializable{
         return sb.toString();
     }
 
+    private void graphTraversal(Button button, Label explanationLabel, TreeItem<String> root) {
+        Hash hash = new Hash();
+        Edges edge = new Edges();
+        String btnText = button.getText();
+        String selectedItem = edge.getHashKeyByValue(edge.getGraphEdges(), btnText);
+        List<TreeItem<String>> selectedItemInTree = findNode(root, selectedItem + " " + hash.getGraphVerticies().get(selectedItem));
+
+        labelFinal.setText("");
+
+        for (TreeItem<String> child : selectedItemInTree) {
+            if (!child.getChildren().isEmpty()) {
+                String nextLeftNode = findFirstNumber(child.getChildren().getFirst().getValue());
+                String nextRigntNode = findFirstNumber(child.getChildren().getLast().getValue());
+
+                // Получаем текст "ребра" из хэш-таблицы и выводим его в Button
+                leftChildBtn.setText(edge.getGraphEdges().get(nextLeftNode));
+                rightChildBtn.setText(edge.getGraphEdges().get(nextRigntNode));
+
+                // Устанавливаем текст для Label - родитель двух кнопок, которые являются потомками
+                currentNodeLabel.setText("");
+                currentNodeLabel.setText(hash.GetVerticiesByStrId(hash.getGraphVerticies(), selectedItem) + " " + hash.getGraphVerticies().get(selectedItem));
+
+                showExplanation(explanationLabel, selectedItem);
+            }
+            else {
+                System.out.println("Дальнейшей детализации не предусмотрено");
+            }
+            if (hash.getGraphVerticies().get(selectedItem).contains("Тип:")) {
+                String text = hash.getGraphVerticies().get(selectedItem);
+
+                labelFinal.setText(newLineInLabel(text));
+                labelFinal.setTextFill(Color.GREEN);
+
+                Image image = new Image(loadImage(selectedItem));
+                imageView.setImage(image);
+            }
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
 
         labelFinal.setText("");
 
         Hash hash = new Hash();
 
         int size = 112;
-        TreeItem<String> root = new TreeItem<>("0 " + hash.getHashtable().get("0"));
-        /*
-        TreeItem<String> root = new TreeItem<>("""
-                0 Что вы больше хотите\s
-                Форму тела/Силу  или\s
-                Гибкость/Выносливость?""");
-         */
+        TreeItem<String> root = new TreeItem<>("0 " + hash.getGraphVerticies().get("0"));
+
         root.setExpanded(true);
         treeView.setRoot(root);
 
         // Создание всех будущих вершин TreeView
         TreeItem<String>[] arrayy = new TreeItem[size];
         for(int i = 1; i <= size - 1; i++) {
-            arrayy[i] = new TreeItem<>(i + " " + hash.getHashtable().get(String.valueOf(i)));
+            arrayy[i] = new TreeItem<>(i + " " + hash.getGraphVerticies().get(String.valueOf(i)));
         }
 
         // Заполнение TreeView TreeItem'ами
@@ -213,7 +242,7 @@ public class TrainingProgramController implements Initializable{
 
 
         Label explanationLabel = new Label("Label"); // Label для Explanation Form
-        showExplanation(explanationLabel, findFirstNumber(root.getValue()));
+        showExplanation(explanationLabel, findFirstNumber(root.getValue())); //Вывод объяснения для каждого ребра графа
 
         //Первые 2 потомка нулевой вершины
         FirstComboBox.getItems().add(root.getValue());
@@ -271,83 +300,22 @@ public class TrainingProgramController implements Initializable{
         Edges edge = new Edges();
         currentNodeLabel.setText(root.getValue());
 
-        leftChildBtn.setText(edge.getHashtable().get(root.getChildren().getFirst().getValue().substring(0, 1)));
-
+        leftChildBtn.setText(edge.getGraphEdges().get(root.getChildren().getFirst().getValue().substring(0, 1)));
+        // Обработчик события левой кнопки для прохода графа
         leftChildBtn.setOnAction((event) -> {
-            String btnText = leftChildBtn.getText();
-            String selectedItem = edge.getHashKeyByValue(edge.getHashtable(), btnText);
-            List<TreeItem<String>> selectedItemInTree = findNode(root, selectedItem + " " + hash.getHashtable().get(selectedItem));
-
-            labelFinal.setText("");
-
-            for (TreeItem<String> child : selectedItemInTree) {
-                if (!child.getChildren().isEmpty()) {
-                    String nextLeftNode = findFirstNumber(child.getChildren().getFirst().getValue());
-                    String nextRigntNode = findFirstNumber(child.getChildren().getLast().getValue());
-
-                    leftChildBtn.setText(edge.getHashtable().get(nextLeftNode));
-                    rightChildBtn.setText(edge.getHashtable().get(nextRigntNode));
-
-                    currentNodeLabel.setText("");
-                    currentNodeLabel.setText(hash.GetVerticiesByStrId(selectedItem) + " " + hash.getHashtable().get(selectedItem));
-
-                    showExplanation(explanationLabel, selectedItem);
-                }
-                else {
-                    System.out.println("Дальнейшей детализации не предусмотрено");
-                }
-                if (hash.getHashtable().get(selectedItem).contains("Тип:")) {
-                    //labelFinal.setText(hash.getHashtable().get(selectedItem));
-                    String text = hash.getHashtable().get(selectedItem);
-                    labelFinal.setText(newLineInLabel(text));
-                    labelFinal.setTextFill(Color.GREEN);
-
-                    Image image = new Image(loadImage(selectedItem));
-                    imageView.setImage(image);
-                    System.out.println(loadImage(selectedItem));
-                }
-            }
+            graphTraversal(leftChildBtn, explanationLabel, root);
         });
 
-        rightChildBtn.setText(edge.getHashtable().get(root.getChildren().getLast().getValue().substring(0, 1)));
+        rightChildBtn.setText(edge.getGraphEdges().get(root.getChildren().getLast().getValue().substring(0, 1)));
+        // Обработчик события левой кнопки для прохода графа
         rightChildBtn.setOnAction(event -> {
-            String btnText = rightChildBtn.getText();
-            String selectedItem = edge.getHashKeyByValue(edge.getHashtable(), btnText);
-            List<TreeItem<String>> selectedItemInTree = findNode(root, selectedItem + " " + hash.getHashtable().get(selectedItem));
-
-            labelFinal.setText("");
-            for (TreeItem<String> child : selectedItemInTree) {
-                if (!child.getChildren().isEmpty()) {
-                    String nextLeftNode = findFirstNumber(child.getChildren().getFirst().getValue());
-                    String nextRigntNode = findFirstNumber(child.getChildren().getLast().getValue());
-
-                    leftChildBtn.setText(edge.getHashtable().get(nextLeftNode));
-                    rightChildBtn.setText(edge.getHashtable().get(nextRigntNode));
-
-                    currentNodeLabel.setText("");
-                    currentNodeLabel.setText(hash.GetVerticiesByStrId(selectedItem) + " " + hash.getHashtable().get(selectedItem));
-
-                    showExplanation(explanationLabel, selectedItem);
-                }
-                else {
-                    System.out.println("Дальнейшей детализации не предусмотрено");
-                }
-                if (hash.getHashtable().get(selectedItem).contains("Тип:")) {
-                    //labelFinal.setText(hash.getHashtable().get(selectedItem));
-                    String text = hash.getHashtable().get(selectedItem);
-                    labelFinal.setText(newLineInLabel(text));
-                    labelFinal.setTextFill(Color.GREEN);
-                    Image image = new Image(loadImage(selectedItem));
-                    imageView.setImage(image);
-                }
-            }
+            graphTraversal(rightChildBtn, explanationLabel, root);
         });
 
+        // Обработчик события для "шага назад" в обходе графа
         moveBackBtn.setOnAction(event -> {
-            System.out.println(leftChildBtn.getText());
-            String selectedItem = edge.getHashKeyByValue(edge.getHashtable(), rightChildBtn.getText());
-            System.out.println("Выбрана вершина: " + selectedItem);
-            List<TreeItem<String>> selectedItemInTree = findNode(root, selectedItem + " " + hash.getHashtable().get(selectedItem));
+            String selectedItem = edge.getHashKeyByValue(edge.getGraphEdges(), rightChildBtn.getText());
+            List<TreeItem<String>> selectedItemInTree = findNode(root, selectedItem + " " + hash.getGraphVerticies().get(selectedItem));
             for (TreeItem<String> child : selectedItemInTree) {
                 if (child.getParent().getParent() != null) {
                     String prevParent = child.getParent().getParent().getValue();
@@ -356,14 +324,13 @@ public class TrainingProgramController implements Initializable{
 
                     imageView.setImage(null);
                     labelFinal.setText("");
-                    leftChildBtn.setText(edge.getHashtable().get(prevLeftNode));
-                    rightChildBtn.setText(edge.getHashtable().get(prevRigntNode));
+
+                    leftChildBtn.setText(edge.getGraphEdges().get(prevLeftNode));
+                    rightChildBtn.setText(edge.getGraphEdges().get(prevRigntNode));
+
                     currentNodeLabel.setText("");
                     currentNodeLabel.setText(prevParent);
 
-                    int prevExpl = Integer.parseInt(selectedItem) - 1;
-                    System.out.println("HUITA = " + prevParent);
-                    System.out.println("HUITA" + edge.getHashKeyByValue(edge.getHashtable(), prevParent));
                     showExplanation(explanationLabel, findFirstNumber(prevParent));
                 }
                 else {
