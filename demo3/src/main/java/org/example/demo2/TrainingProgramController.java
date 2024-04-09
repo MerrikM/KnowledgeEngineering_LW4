@@ -1,5 +1,4 @@
 package org.example.demo2;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -50,6 +49,10 @@ public class TrainingProgramController implements Initializable{
 
     @FXML
     private Button moveBackBtn;
+
+    @FXML
+    private TextField textArea;
+
     private TreeItem<String> findTreeItem(TreeItem<String> root, String name) {
         if (root.getValue().equals(name)) {
             return root;
@@ -123,7 +126,6 @@ public class TrainingProgramController implements Initializable{
         List<TreeItem<String>> selectedItemInTree = findNode(root, selectedItem + " " + hash.getGraphVerticies().get(selectedItem));
 
         labelFinal.setText("");
-
         for (TreeItem<String> child : selectedItemInTree) {
             if (!child.getChildren().isEmpty()) {
                 String nextLeftNode = findFirstNumber(child.getChildren().getFirst().getValue());
@@ -337,6 +339,56 @@ public class TrainingProgramController implements Initializable{
                     System.out.println("Шаг назад недоступен, у данных потомков отсутствует родитель, с которого можно начать обход");
                 }
             }
+        });
+
+        textArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                System.out.println("Текст изменен на: " + newValue);
+                List<TreeItem<String>> selectedItemInTree = findNode(root, newValue + " " + hash.getGraphVerticies().get(newValue));
+                String currentNode = hash.GetVerticiesByStrId(hash.getGraphVerticies(), newValue) + " " + hash.getGraphVerticies().get(newValue);
+
+                labelFinal.setText("");
+                imageView.setImage(null);
+                currentNodeLabel.setText(currentNode);
+                System.out.println(currentNodeLabel.getText());
+
+                if(Integer.parseInt(newValue) < 0 || newValue.isEmpty()) {
+                    System.out.println("Переход к вершине " + newValue + " не возможен");
+                }
+                else {
+                    for (TreeItem<String> child : selectedItemInTree) {
+                        if (!child.getChildren().isEmpty()) {
+                            String nextLeftNode = findFirstNumber(child.getChildren().getFirst().getValue());
+                            String nextRigntNode = findFirstNumber(child.getChildren().getLast().getValue());
+
+                            // Получаем текст "ребра" из хэш-таблицы и выводим его в Button
+                            leftChildBtn.setText(edge.getGraphEdges().get(nextLeftNode));
+                            rightChildBtn.setText(edge.getGraphEdges().get(nextRigntNode));
+
+                            // Устанавливаем текст для Label - родитель двух кнопок, которые являются потомками
+                            currentNodeLabel.setText("");
+                            currentNodeLabel.setText(hash.GetVerticiesByStrId(hash.getGraphVerticies(), newValue) + " " + hash.getGraphVerticies().get(newValue));
+
+                            showExplanation(explanationLabel, newValue);
+                        } else {
+                            System.out.println("Дальнейшей детализации не предусмотрено");
+                        }
+                        if (hash.getGraphVerticies().get(newValue).contains("Тип:")) {
+                            String text = hash.getGraphVerticies().get(newValue);
+
+                            labelFinal.setText(newLineInLabel(text));
+                            labelFinal.setTextFill(Color.GREEN);
+
+                            Image image = new Image(loadImage(newValue));
+                            imageView.setImage(image);
+                        }
+                    }
+                }
+            }
+            catch (RuntimeException ex) {
+                System.out.println("Переход к вершине " + newValue + " не возможен");
+            }
+
         });
 
         showAllTreeNodes.setOnAction(e -> {
